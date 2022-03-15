@@ -8,7 +8,7 @@ export function ContactPage() {
             <h5 className="card-title">Contacto</h5>
             <form>
               <div className="form-group">
-                <label for="contact-email">Email</label>
+                <label htmlFor="contact-email">Email</label>
                 <input
                   type="email"
                   className="form-control"
@@ -18,7 +18,7 @@ export function ContactPage() {
                 />
               </div>
               <div className="form-group mt-2">
-                <label for="contact-message">Mensaje</label>
+                <label htmlFor="contact-message">Mensaje</label>
                 <textarea
                   className="form-control"
                   id="contact-messag"
