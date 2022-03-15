@@ -1,0 +1,27 @@
+export function ContactPage() {
+  return (
+    <div className="row d-flex justify-content-center">
+      <div className="col-8">
+        <div className="card" style={{ width: "100%" }}>
+          <div className="card-body">
+            <h5 className="card-title">Contacto</h5>
+            <form>
+              <div className="form-group">
+                <label for="contact-email">Email</label>
+                <input type="email" className="form-control" id="contact-email" placeholder="Ingrese un correo" />
+              </div>
+              <div className="form-group mt-2">
+                <label for="contact-message">Mensaje</label>
+                <textarea className="form-control" id="contact-messag" rows="3"></textarea>
+              </div>
+
+              <button type="submit" className="btn btn-primary mb-2 mt-4">
+                Envíar
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
