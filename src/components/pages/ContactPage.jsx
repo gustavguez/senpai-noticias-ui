@@ -3,6 +3,7 @@ import { api } from "../../api/api";
 
 export function ContactPage() {
   const [email, setEmail] = useState("");
+  const [foto, setFoto] = useState("");
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -10,23 +11,29 @@ export function ContactPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    //Creamos un form data
+    const formData = new FormData();
+    formData.append("correo", email);
+    formData.append("mensaje", mensaje);
+    formData.append("foto", foto);
+
     //Cambiar el estado loading a true
     setLoading(true);
 
     //Llamar un POST con axios a /contact y mandar la info en el
     //estado actual
-    api
-      .post("/contact", {
-        otrocampo: "hola",
-        correo: email,
-        mensaje: mensaje,
-      })
-      .then((response) => {
+    api.post("/contact", formData).then(
+      (response) => {
         console.log(response);
 
         //Cambiar el estado loading a false
         setLoading(false);
-      });
+      },
+      () => {
+        //Cambiar el estado loading a false
+        setLoading(false);
+      }
+    );
   };
 
   //Maneja los cambios del formulario - estado
@@ -36,6 +43,11 @@ export function ContactPage() {
 
   const handleMensajeChange = (event) => {
     setMensaje(event.target.value);
+  };
+
+  const handleFotoChange = (event) => {
+    const fileSelected = event.target.files[0];
+    setFoto(fileSelected);
   };
 
   return (
@@ -55,6 +67,19 @@ export function ContactPage() {
                   className="form-control"
                   id="contact-email"
                   placeholder="Ingrese un correo"
+                  required
+                />
+              </div>
+              <div className="form-group mt-2">
+                <label htmlFor="contact-foto">Foto</label>
+                <input
+                  onChange={handleFotoChange}
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  name="foto"
+                  className="form-control"
+                  id="contact-foto"
+                  placeholder="Ingresa una foto"
                   required
                 />
               </div>
