@@ -8,7 +8,7 @@ export function HomePage() {
   //Buscar noticias a la api
   useEffect(() => {
     //Utilizar AXIOS para ir a la API a buscar la info
-    api.get("/noticias-principales").then((response) => {
+    api.get("/noticias").then((response) => {
       //Actualizamos el estado con las noticias de la API
       setNoticias(response.data);
     });

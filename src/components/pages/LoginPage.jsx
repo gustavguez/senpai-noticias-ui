@@ -1,35 +1,38 @@
 import { useState } from "react";
 import { api } from "../../api/api";
 
-export function ContactPage() {
+export function LoginPage() {
   const [email, setEmail] = useState("");
-  const [foto, setFoto] = useState("");
-  const [mensaje, setMensaje] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   //El formulario se manda
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    //Creamos un form data
-    const formData = new FormData();
-    formData.append("correo", email);
-    formData.append("mensaje", mensaje);
-    formData.append("foto", foto);
-
     //Cambiar el estado loading a true
     setLoading(true);
 
-    //Llamar un POST con axios a /contact y mandar la info en el
+    //Borramos el error
+    setError("");
+
+    //Llamar un POST con axios a /login y mandar la info en el
     //estado actual
-    api.post("/contact/send", formData).then(
+    api.post("/auth/login", { email: email, password: password }).then(
       (response) => {
         console.log(response);
 
         //Cambiar el estado loading a false
         setLoading(false);
       },
-      () => {
+      (errorResponse) => {
+        //Guardamos la respuesta de la api en una constante
+        const response = errorResponse.response.data;
+
+        //Cambiamos el estado para mostrar el error
+        setError(response.error);
+
         //Cambiar el estado loading a false
         setLoading(false);
       }
@@ -41,13 +44,8 @@ export function ContactPage() {
     setEmail(event.target.value);
   };
 
-  const handleMensajeChange = (event) => {
-    setMensaje(event.target.value);
-  };
-
-  const handleFotoChange = (event) => {
-    const fileSelected = event.target.files[0];
-    setFoto(fileSelected);
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
   };
 
   return (
@@ -55,7 +53,7 @@ export function ContactPage() {
       <div className="col-8">
         <div className="card" style={{ width: "100%" }}>
           <div className="card-body">
-            <h5 className="card-title">Contacto</h5>
+            <h5 className="card-title">Login</h5>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="contact-email">Email</label>
@@ -70,36 +68,25 @@ export function ContactPage() {
                   required
                 />
               </div>
-              <div className="form-group mt-2">
-                <label htmlFor="contact-foto">Foto</label>
+              <div className="form-group">
+                <label htmlFor="contact-password">Clave</label>
                 <input
-                  onChange={handleFotoChange}
-                  type="file"
-                  accept="image/png, image/jpeg"
-                  name="foto"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  type="password"
+                  name="password"
                   className="form-control"
-                  id="contact-foto"
-                  placeholder="Ingresa una foto"
+                  id="contact-password"
+                  placeholder="Ingrese una clave"
                   required
                 />
               </div>
-              <div className="form-group mt-2">
-                <label htmlFor="contact-message">Mensaje</label>
-                <textarea
-                  value={mensaje}
-                  onChange={handleMensajeChange}
-                  name="mensaje"
-                  className="form-control"
-                  id="contact-messag"
-                  rows="3"
-                  placeholder="Ingrese un mensaje"
-                  required
-                ></textarea>
-              </div>
 
               <button type="submit" className="btn btn-primary mb-2 mt-4">
-                {loading ? "Cargando..." : "Envíar"}
+                {loading ? "Cargando..." : "Login"}
               </button>
+
+              <span className="text-danger d-block">{error}</span>
             </form>
           </div>
         </div>
